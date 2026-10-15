@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}Hospital Management System{% endblock %}
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100">
+
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-0 h-screen w-64 bg-slate-900 text-white">
+
+        <div class="p-6 border-b border-slate-700">
+            <h1 class="text-2xl font-bold text-cyan-400">
+                MediCare
+            </h1>
+
+            <p class="text-sm text-slate-400 mt-1">
+                Hospital Management
+            </p>
+        </div>
+
+        <nav class="p-4 space-y-2">
+
+            {% if user.is_authenticated %}<a href="{% url 'dashboard' %}"
+               class="block px-4 py-3 rounded-lg hover:bg-slate-800">
+                Dashboard
+            </a>{% endif %}
+
+            {% if perms.hospitalapp.view_department %}
+            <a href="{% url 'department_list' %}"
+                class="block px-4 py-3 rounded-lg hover:bg-slate-800">
+                 Departments
+            </a>
+            {% endif %}
+
+            {% if perms.hospitalapp.view_doctor %}
+            <a href="{% url 'doctor_list' %}"
+                 class="block px-4 py-3 rounded-lg hover:bg-slate-800">
+                  Doctors
+            </a>
+            {% endif %}
+
+            {% if perms.hospitalapp.view_patient %}
+            <a href="{% url 'patient_list' %}"
+               class="block px-4 py-3 rounded-lg hover:bg-slate-800">
+                Patients
+            </a>
+            {% endif %}
+
+            {% if perms.hospitalapp.view_appointment %}
+            <a href="{% url 'appointment_list' %}"
+               class="block px-4 py-3 rounded-lg hover:bg-slate-800">
+                Appointments
+            </a>
+            {% endif %}
+
+            {% if perms.hospitalapp.view_medicine %}
+            <a href="{% url 'medicine_list' %}"
+               class="block px-4 py-3 rounded-lg hover:bg-slate-800">
+                Medicines
+            </a>
+            {% endif %}
+
+            {% if perms.hospitalapp.view_prescription %}
+            <a href="{% url 'prescription_list' %}"
+               class="block px-4 py-3 rounded-lg hover:bg-slate-800">
+                Prescriptions
+            </a>
+            {% endif %}
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="ml-64 min-h-screen">
+
+        <!-- Top Navbar -->
+        <header class="bg-white shadow-sm px-8 py-5 flex justify-between items-center">
+
+            <div>
+                <h2 class="text-xl font-semibold text-slate-800">
+                    {% block heading %}Dashboard{% endblock %}
+                </h2>
+            </div>
+
+<div class="flex items-center gap-3">
+
+    <div class="w-10 h-10 rounded-full bg-cyan-500
+                text-white flex items-center justify-center font-bold">
+        {% if user.is_authenticated %}
+            {{ user.username|first|upper }}
+        {% else %}
+            G
+        {% endif %}
+    </div>
+
+    <div>
+        {% if user.is_authenticated %}
+            <p class="font-semibold text-slate-700">
+                {{ user.username }}
+            </p>
+
+            <p class="text-xs text-slate-400">
+                {% if user.is_superuser %}
+                    Administrator
+                {% elif user.groups.all %}
+                    {% for group in user.groups.all %}
+                        {{ group.name }}{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                        Staff Member
+                    {% endfor %}
+                {% else %}
+                    Staff Member
+                {% endif %}
+            </p>
+
+            <a href="{% url 'logout' %}"
+               class="text-xs text-red-600 hover:underline">
+                Logout
+            </a>
+
+        {% else %}
+            <p class="font-semibold text-slate-700">Guest</p>
+            <a href="{% url 'login' %}"
+               class="text-xs text-cyan-600">
+                Login
+            </a>
+        {% endif %}
+    </div>
+
+</div>
+
+        </header>
+
+
+        <!-- Page Content -->
+        <section class="p-8">
+
+            {% block content %}
+            {% endblock %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

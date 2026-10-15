@@ -1,0 +1,162 @@
+{% extends 'hospitalapp/base.html' %}
+
+{% block title %}
+Appointments
+{% endblock %}
+
+{% block heading %}
+Appointments
+{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-between items-center mb-6">
+
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800">
+            Appointments
+        </h1>
+
+        <p class="text-slate-500 mt-1">
+            Manage patient appointments
+        </p>
+    </div>
+
+    {% if perms.hospitalapp.add_appointment %}<a href="{% url 'appointment_add' %}"
+       class="bg-cyan-500 hover:bg-cyan-600
+              text-white px-5 py-3 rounded-lg font-semibold">
+
+        + New Appointment
+
+    </a>{% endif %}
+
+</div>
+
+
+<div class="bg-white rounded-xl shadow-sm
+            border border-slate-200 overflow-x-auto">
+
+    <table class="w-full">
+
+        <thead class="bg-slate-800 text-white">
+
+            <tr>
+
+                <th class="text-left px-5 py-4">
+                    #
+                </th>
+
+                <th class="text-left px-5 py-4">
+                    Patient
+                </th>
+
+                <th class="text-left px-5 py-4">
+                    Doctor
+                </th>
+
+                <th class="text-left px-5 py-4">
+                    Date
+                </th>
+
+                <th class="text-left px-5 py-4">
+                    Time
+                </th>
+
+                <th class="text-left px-5 py-4">
+                    Reason
+                </th>
+
+                <th class="text-center px-5 py-4">
+                    Actions
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for appointment in appointments %}
+
+            <tr class="border-b hover:bg-slate-50">
+
+                <td class="px-5 py-4">
+                    {{ forloop.counter }}
+                </td>
+
+                <td class="px-5 py-4 font-semibold text-slate-800">
+                    {{ appointment.patient.name }}
+                </td>
+
+                <td class="px-5 py-4">
+
+                    <span class="bg-cyan-100 text-cyan-700
+                                 px-3 py-1 rounded-full text-sm">
+
+                        {{ appointment.doctor.name }}
+
+                    </span>
+
+                </td>
+
+                <td class="px-5 py-4">
+                    {{ appointment.appointment_date }}
+                </td>
+
+                <td class="px-5 py-4">
+                    {{ appointment.appointment_time }}
+                </td>
+
+                <td class="px-5 py-4">
+                    {{ appointment.reason }}
+                </td>
+
+                <td class="px-5 py-4">
+
+                    <div class="flex justify-center gap-2">
+
+                        {% if perms.hospitalapp.change_appointment %}<a href="{% url 'appointment_edit' appointment.id %}"
+                           class="bg-blue-500 hover:bg-blue-600
+                                  text-white px-3 py-2 rounded-lg text-sm">
+
+                            Edit
+
+                        </a>{% endif %}
+
+                        {% if perms.hospitalapp.delete_appointment %}<a href="{% url 'appointment_delete' appointment.id %}"
+                           class="bg-red-500 hover:bg-red-600
+                                  text-white px-3 py-2 rounded-lg text-sm">
+
+                            Delete
+
+                        </a>{% endif %}
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="7"
+                    class="text-center py-10 text-slate-500">
+
+                    No appointments found.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

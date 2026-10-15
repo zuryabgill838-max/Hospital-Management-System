@@ -1,0 +1,99 @@
+{% extends 'hospitalapp/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto">
+
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">
+            {{ title }}
+        </h1>
+
+        <p class="text-gray-500">
+            Create prescription with multiple medicines
+        </p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow p-6">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <!-- Doctor -->
+            <div class="mb-5">
+                <label class="block font-semibold mb-2">
+                    Doctor
+                </label>
+
+                {{ form.doctor }}
+
+                {{ form.doctor.errors }}
+            </div>
+
+
+            <!-- Patient -->
+            <div class="mb-5">
+                <label class="block font-semibold mb-2">
+                    Patient
+                </label>
+
+                {{ form.patient }}
+
+                {{ form.patient.errors }}
+            </div>
+
+
+            <!-- Medicines -->
+            <div class="mb-5">
+                <label class="block font-semibold mb-2">
+                    Medicines
+                </label>
+
+                <p class="text-sm text-gray-500 mb-2">
+                    Ctrl + Click karke multiple medicines select karein.
+                </p>
+
+                {{ form.medicines }}
+
+                {{ form.medicines.errors }}
+            </div>
+
+
+            <!-- Instructions -->
+            <div class="mb-5">
+                <label class="block font-semibold mb-2">
+                    Instructions
+                </label>
+
+                {{ form.instructions }}
+
+                {{ form.instructions.errors }}
+            </div>
+
+
+            <div class="flex gap-3">
+
+                <button
+                    type="submit"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg">
+                    Save Prescription
+                </button>
+
+                <a
+                    href="{% url 'prescription_list' %}"
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

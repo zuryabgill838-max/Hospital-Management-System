@@ -1,0 +1,109 @@
+{% extends 'hospitalapp/base.html' %}
+
+{% block title %}Patients{% endblock %}
+{% block heading %}Patients{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800">
+            Patients
+        </h1>
+        <p class="text-slate-500 mt-1">
+            Manage hospital patients and their profiles
+        </p>
+    </div>
+
+    {% if perms.hospitalapp.add_patient %}<a href="{% url 'patient_add' %}"
+       class="bg-cyan-500 hover:bg-cyan-600 text-white
+              px-5 py-3 rounded-lg font-semibold">
+        + Add Patient
+    </a>{% endif %}
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border
+            border-slate-200 overflow-x-auto">
+
+    <table class="w-full text-sm">
+        <thead class="bg-slate-800 text-white">
+            <tr>
+                <th class="text-left px-5 py-4">#</th>
+                <th class="text-left px-5 py-4">Name</th>
+                <th class="text-left px-5 py-4">Age</th>
+                <th class="text-left px-5 py-4">Gender</th>
+                <th class="text-left px-5 py-4">Phone</th>
+                <th class="text-left px-5 py-4">Profile</th>
+                <th class="text-center px-5 py-4">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for patient in patients %}
+            <tr class="border-b hover:bg-slate-50">
+
+                <td class="px-5 py-4">
+                    {{ forloop.counter }}
+                </td>
+
+                <td class="px-5 py-4 font-semibold">
+                    {{ patient.name }}
+                </td>
+
+                <td class="px-5 py-4">
+                    {{ patient.age }}
+                </td>
+
+                <td class="px-5 py-4">
+                    {{ patient.gender }}
+                </td>
+
+                <td class="px-5 py-4">
+                    {{ patient.phone }}
+                </td>
+
+                <td class="px-5 py-4">
+                    {% if perms.hospitalapp.add_patientprofile or perms.hospitalapp.change_patientprofile %}<a href="{% url 'patient_profile' patient.id %}"
+                       class="text-cyan-700 hover:underline font-medium">
+                        {% if patient.id %}
+                            {% if patient.profile %}
+                                View / Edit
+                            {% else %}
+                                Add Profile
+                            {% endif %}
+                        {% endif %}
+                    </a>{% endif %}
+                </td>
+
+                <td class="px-5 py-4">
+                    <div class="flex justify-center gap-2">
+
+                        {% if perms.hospitalapp.change_patient %}<a href="{% url 'patient_edit' patient.id %}"
+                           class="bg-blue-500 hover:bg-blue-600
+                                  text-white px-3 py-2 rounded-lg">
+                            Edit
+                        </a>{% endif %}
+
+                        {% if perms.hospitalapp.delete_patient %}<a href="{% url 'patient_delete' patient.id %}"
+                           class="bg-red-500 hover:bg-red-600
+                                  text-white px-3 py-2 rounded-lg">
+                            Delete
+                        </a>{% endif %}
+
+                    </div>
+                </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="7"
+                    class="text-center py-10 text-slate-500">
+                    No patients found. Add your first patient.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'hospitalapp/base.html' %}
+
+{% block title %}
+Doctors
+{% endblock %}
+
+{% block heading %}
+Doctors
+{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-between items-center mb-6">
+
+    <div>
+        <h1 class="text-3xl font-bold text-slate-800">
+            Doctors
+        </h1>
+
+        <p class="text-slate-500 mt-1">
+            Manage hospital doctors
+        </p>
+    </div>
+
+    {% if perms.hospitalapp.add_doctor %}<a href="{% url 'doctor_add' %}"
+       class="bg-cyan-500 hover:bg-cyan-600
+              text-white px-5 py-3 rounded-lg font-semibold">
+
+        + Add Doctor
+
+    </a>{% endif %}
+
+</div>
+
+
+<div class="bg-white rounded-xl shadow-sm
+            border border-slate-200 overflow-hidden">
+
+    <table class="w-full">
+
+        <thead class="bg-slate-800 text-white">
+
+            <tr>
+
+                <th class="text-left px-6 py-4">
+                    #
+                </th>
+
+                <th class="text-left px-6 py-4">
+                    Doctor
+                </th>
+
+                <th class="text-left px-6 py-4">
+                    Specialization
+                </th>
+
+                <th class="text-left px-6 py-4">
+                    Phone
+                </th>
+
+                <th class="text-left px-6 py-4">
+                    Department
+                </th>
+
+                <th class="text-center px-6 py-4">
+                    Actions
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for doctor in doctors %}
+
+            <tr class="border-b hover:bg-slate-50">
+
+                <td class="px-6 py-4">
+                    {{ forloop.counter }}
+                </td>
+
+                <td class="px-6 py-4 font-semibold text-slate-800">
+                    {{ doctor.name }}
+                </td>
+
+                <td class="px-6 py-4">
+                    {{ doctor.specialization }}
+                </td>
+
+                <td class="px-6 py-4">
+                    {{ doctor.phone }}
+                </td>
+
+                <td class="px-6 py-4">
+
+                    <span class="bg-cyan-100 text-cyan-700
+                                 px-3 py-1 rounded-full text-sm">
+
+                        {{ doctor.department.name }}
+
+                    </span>
+
+                </td>
+
+                <td class="px-6 py-4">
+
+                    <div class="flex justify-center gap-2">
+
+                        {% if perms.hospitalapp.change_doctor %}<a href="{% url 'doctor_edit' doctor.id %}"
+                           class="bg-blue-500 hover:bg-blue-600
+                                  text-white px-4 py-2 rounded-lg text-sm">
+
+                            Edit
+
+                        </a>{% endif %}
+
+                        {% if perms.hospitalapp.delete_doctor %}<a href="{% url 'doctor_delete' doctor.id %}"
+                           class="bg-red-500 hover:bg-red-600
+                                  text-white px-4 py-2 rounded-lg text-sm">
+
+                            Delete
+
+                        </a>{% endif %}
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="6"
+                    class="text-center py-10 text-slate-500">
+
+                    No doctors found.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

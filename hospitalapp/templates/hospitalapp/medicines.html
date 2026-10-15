@@ -1,0 +1,89 @@
+{% extends 'hospitalapp/base.html' %}
+
+{% block content %}
+
+<div class="p-6">
+
+    <div class="flex justify-between items-center mb-6">
+
+        <h1 class="text-2xl font-bold">
+            Medicines
+        </h1>
+
+        {% if perms.hospitalapp.add_medicine %}<a href="{% url 'medicine_add' %}"
+           class="bg-indigo-600 text-white px-4 py-2 rounded">
+            + Add Medicine
+        </a>{% endif %}
+
+    </div>
+
+
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+
+        <table class="w-full">
+
+            <thead class="bg-gray-100">
+
+                <tr>
+                    <th class="p-3 text-left">Name</th>
+                    <th class="p-3 text-left">Manufacturer</th>
+                    <th class="p-3 text-left">Price</th>
+                    <th class="p-3 text-left">Actions</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for medicine in medicines %}
+
+                <tr class="border-t">
+
+                    <td class="p-3">
+                        {{ medicine.name }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ medicine.manufacturer }}
+                    </td>
+
+                    <td class="p-3">
+                        {{ medicine.price }}
+                    </td>
+
+                    <td class="p-3">
+
+                        {% if perms.hospitalapp.change_medicine %}<a href="{% url 'medicine_edit' medicine.id %}"
+                           class="text-blue-600 mr-3">
+                            Edit
+                        </a>{% endif %}
+
+                        {% if perms.hospitalapp.delete_medicine %}<a href="{% url 'medicine_delete' medicine.id %}"
+                           class="text-red-600">
+                            Delete
+                        </a>{% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="4" class="p-4 text-center">
+                        No medicines found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
